@@ -112,9 +112,9 @@ app.post("/upload", upload.single("photo"), async (req, res) => {
 
     if (userRole === "target") {
       sourceURL = selectedImagePath;
-      targetURL = absoluteUserImagePath;
+      targetURL = userImageURL;
     } else {
-      sourceURL = absoluteUserImagePath;
+      sourceURL = userImageURL;
       targetURL = selectedImagePath;
     }
 
