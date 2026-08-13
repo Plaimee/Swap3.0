@@ -1,0 +1,123 @@
+body {
+  background-color: #f8f9fa;
+  user-select: none;
+  overflow-x: hidden;
+}
+
+.step-container {
+  display: none;
+}
+
+.step-container.active {
+  display: block;
+}
+
+.art-card-img {
+  height: 180px;
+  object-fit: cover;
+}
+
+/* Step Progress Bar Indicator */
+.step-indicator {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.step-indicator::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #dee2e6;
+  z-index: 1;
+}
+
+.step-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #dee2e6;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  z-index: 2;
+  position: relative;
+}
+
+.step-badge.active {
+  background: #0d6efd;
+  color: white;
+}
+
+.step-badge.completed {
+  background: #198754;
+  color: white;
+}
+
+/* Custom Radio Images Selection */
+.custom-radio-img {
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-check:checked + .custom-radio-img {
+  border-color: #0d6efd;
+  box-shadow: 0 0 10px rgba(13, 110, 253, 0.5);
+}
+
+/* Webcam Preview & Canvas Output */
+#webcamPreview {
+  width: 100%;
+  max-width: 270px;
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #000;
+  display: block;
+  margin: 0 auto;
+  transform: scaleX(-1);
+}
+
+#capturedCanvas {
+  width: 100%;
+  max-width: 270px;
+  height: auto;
+  border-radius: 12px;
+  background: #000;
+  display: block;
+  margin: 0 auto;
+}
+
+/* ควบคุมขนาดและความสวยงามของการ์ด Carousel */
+.carousel-item .my-card {
+  max-width: 320px;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out;
+}
+
+.carousel-item .card-img-top {
+  height: 540px;
+  object-fit: cover;
+}
+
+/* ตกแต่งปุ่มเลือกการ์ดเมื่อมีการ Checked */
+.btn-check:checked + .btn-outline-primary {
+  background-color: #0d6efd;
+  color: #fff;
+  border-color: #0d6efd;
+  font-weight: bold;
+}
+
+/* ปรับตำแหน่งปุ่มเลื่อน ซ้าย-ขวา ให้เห็นชัดบน Kiosk */
+.carousel-control-prev,
+.carousel-control-next {
+  width: 10%;
+}
