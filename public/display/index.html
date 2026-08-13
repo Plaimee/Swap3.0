@@ -51,12 +51,7 @@
         document.body.style.textAlign = "left";
       }
 
-      const SOCKET_SERVER_URL =
-        window.location.hostname === "localhost" ||
-        window.location.hostname === "127.0.0.1"
-          ? "http://localhost:3000"
-          : "https://kitchen-amended-nicole-segment.trycloudflare.com/"; // << เปลี่ยนเป็น URL บน Render ของคุณ
-
+      const SOCKET_SERVER_URL = window.location.origin;
       const socket = io(SOCKET_SERVER_URL, {
         query: { token: "UNITY_CLIENT" },
         transports: ["websocket", "polling"],

@@ -35,7 +35,7 @@ const insertPlayerLog = async (data) => {
         INSERT INTO player_logs (player_id, selected_art, consent_accepted, swap_mode, result_image_url) VALUES ($1, $2, $3, $4, $5) RETURNING id
     `;
 
-  const [values] = [
+  const values = [
     data.playerId,
     data.selectedArt,
     Boolean(data.consentAccepted),
