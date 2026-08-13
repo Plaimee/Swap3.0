@@ -108,14 +108,14 @@ app.post("/upload", upload.single("photo"), async (req, res) => {
     const currentYear = new Date().getFullYear();
     const artYear = parseInt(req.body.artYear, 10) || currentYear;
 
-    let sourcePath, targetPath;
+    let sourceURL, targetURL;
 
     if (userRole === "target") {
-      sourcePath = selectedImagePath;
-      targetPath = absoluteUserImagePath;
+      sourceURL = selectedImagePath;
+      targetURL = absoluteUserImagePath;
     } else {
-      sourcePath = absoluteUserImagePath;
-      targetPath = selectedImagePath;
+      sourceURL = absoluteUserImagePath;
+      targetURL = selectedImagePath;
     }
 
     const logId = await insertPlayerLog({
@@ -128,14 +128,14 @@ app.post("/upload", upload.single("photo"), async (req, res) => {
 
     console.log(" Received Job:");
     console.log("- User Socket ID: ", userSocketId);
-    console.log("- Source (User): ", sourcePath);
-    console.log("- Target (Selected): ", targetPath);
+    console.log("- Source (User): ", sourceURL);
+    console.log("- Target (Selected): ", targetURL);
     console.log("- User Photo to Delete Later: ", absoluteUserImagePath);
 
     const jobData = {
       logId: logId,
-      sourcePath: sourcePath,
-      targetPath: targetPath,
+      sourceURL: sourceURL,
+      targetURL: targetURL,
       uploadedUserPath: absoluteUserImagePath,
       userSocketId: userSocketId,
       userRole: userRole,
