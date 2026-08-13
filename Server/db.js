@@ -18,7 +18,7 @@ const initDatabase = async () => {
             consent_accepted BOOLEAN NOT NULL DEFAULT FALSE,
             swap_mode VARCHAR(255) NOT NULL,
             result_image_url VARCHAR(255) DEFAULT NULL,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
     `;
     await pool.query(createTableQuery);
