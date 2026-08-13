@@ -107,10 +107,9 @@
                 fullURL;
             }
 
-            // เพิ่ม Cache Buster ป้องกัน Browser ค้างแคชรูปเดิม
-            data.imageURL = fullURL + "?t=" + Date.now();
+            const separator = fullURL.includes("?") ? "&" : "?";
+            data.imageURL = fullURL + separator + "?t=" + Date.now();
 
-            // ส่ง JSON String ทั้ง Object เข้าไปยังฟังก์ชัน OnPayloadReceived ใน Unity
             const jsonString = JSON.stringify(data);
             unityInstance.SendMessage(
               "ScriptManager",
