@@ -6,306 +6,337 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <title>SWAPSWAP - Interactive Kiosk</title>
+    <title>SWAPSWAP</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap"
+      rel="stylesheet"
+    />
   </head>
-  <body class="py-4">
-    <div class="container" style="max-width: 900px">
-      <div class="text-center mb-4">
-        <h2 class="fw-bold text-primary">SWAPSWAP EXPERIENCE</h2>
-        <p class="text-muted">สัมผัสประสบการณ์ย้อนเวลาผ่านงานศิลปะระดับโลก</p>
+  <body>
+    <!-- ===================== START PAGE ===================== -->
+    <section id="startPage">
+      <div class="logo">
+        <img src="assets/logo/Logo.png" alt="swapswap-logo" width="75%" />
       </div>
-
-      <div class="step-indicator px-4">
-        <div class="step-badge active" id="badge-1">1</div>
-        <div class="step-badge" id="badge-2">2</div>
-        <div class="step-badge" id="badge-3">3</div>
-        <div class="step-badge" id="badge-4">4</div>
+      <div class="start-caption">
+        สลับใบหน้า ข้ามผ่านกาลเวลา ระหว่างคุณกับภาพศิลปะระดับตำนาน
       </div>
+      <button id="btnStart" class="btn btn-start">เริ่มต้น</button>
+    </section>
 
-      <!-- STEP 1: CAROUSEL CARDS -->
-      <div id="step-1" class="step-container active">
-        <h2 class="text-center mb-4">เลือกภาพที่คุณต้องการ Face Swap</h2>
+    <!-- ===================== SETUP PAGE ===================== -->
+    <div class="container mt-4 d-none" id="setupPage">
+      <nav class="navbar">
+        <div class="logo">
+          <img src="assets/logo/Logo.png" alt="swapswap-logo" width="75%" />
+        </div>
 
-        <div id="artCarousel" class="carousel slide" data-bs-ride="false">
-          <div class="carousel-inner p-2">
-            <!-- Card Item 1 -->
-            <div class="carousel-item active">
-              <div class="card my-card mx-auto shadow-sm">
-                <img
-                  src="/assets/cover/monalisa.png"
-                  class="card-img-top"
-                  alt="Mona Lisa"
-                />
-                <input
-                  type="radio"
-                  class="btn-check"
-                  name="imageOptions"
-                  id="opt1"
-                  value="/assets/art/monalisa.png"
-                  data-year="1503"
-                  checked
-                />
-              </div>
-            </div>
+        <div class="step-indicator">
+          <div class="step-badge active" id="badge-1">1</div>
+          <div class="step-badge" id="badge-2">2</div>
+          <div class="step-badge" id="badge-3">3</div>
+          <div class="step-badge" id="badge-4">4</div>
+          <div class="step-badge" id="badge-5">5</div>
+        </div>
+      </nav>
 
-            <!-- Card Item 2 -->
-            <div class="carousel-item">
-              <div class="card my-card mx-auto shadow-sm">
-                <img
-                  src="/assets/cover/girl-with-a-pearl-earring.png"
-                  class="card-img-top"
-                  alt="Girl with a Pearl Earring"
-                />
-                <input
-                  type="radio"
-                  class="btn-check"
-                  name="imageOptions"
-                  id="opt2"
-                  value="/assets/art/girl-with-a-pearl-earring.png"
-                  data-year="1665"
-                />
-              </div>
-            </div>
-
-            <!-- Card Item 3 -->
-            <div class="carousel-item">
-              <div class="card my-card mx-auto shadow-sm">
-                <img
-                  src="/assets/cover/jan-van-eyck.png"
-                  class="card-img-top"
-                  alt="Jan Van Eyck"
-                />
-                <input
-                  type="radio"
-                  class="btn-check"
-                  name="imageOptions"
-                  id="opt3"
-                  value="/assets/art/jan-van-eyck.png"
-                  data-year="1433"
-                />
-              </div>
-            </div>
-
-            <!-- Card Item 4 -->
-            <div class="carousel-item">
-              <div class="card my-card mx-auto shadow-sm">
-                <img
-                  src="/assets/cover/portrait-of-a-young-girl.png"
-                  class="card-img-top"
-                  alt="Portrait of a Young Girl"
-                />
-                <input
-                  type="radio"
-                  class="btn-check"
-                  name="imageOptions"
-                  id="opt4"
-                  value="/assets/art/portrait-of-a-young-girl.png"
-                  data-year="1470"
-                />
-              </div>
-            </div>
-
-            <!-- Card Item 5 -->
-            <div class="carousel-item">
-              <div class="card my-card mx-auto shadow-sm">
-                <img
-                  src="/assets/cover/ginevra.png"
-                  class="card-img-top"
-                  alt="Ginevra de' Benci"
-                />
-                <input
-                  type="radio"
-                  class="btn-check"
-                  name="imageOptions"
-                  id="opt5"
-                  value="/assets/art/ginevra.png"
-                  data-year="1478"
-                />
-              </div>
-            </div>
-
-            <!-- Card Item 6 -->
-            <div class="carousel-item">
-              <div class="card my-card mx-auto shadow-sm">
-                <img
-                  src="/assets/cover/raffaello.png"
-                  class="card-img-top"
-                  alt="Raffaello Sanzio"
-                />
-                <input
-                  type="radio"
-                  class="btn-check"
-                  name="imageOptions"
-                  id="opt6"
-                  value="/assets/art/raffaello.png"
-                  data-year="1506"
-                />
-              </div>
-            </div>
-
-            <!-- Card Item 7 -->
-            <div class="carousel-item">
-              <div class="card my-card mx-auto shadow-sm">
-                <img
-                  src="/assets/cover/portrait-of-willemina-van-braeckel.png"
-                  class="card-img-top"
-                  alt="Portrait of Willemina van Braeckel"
-                />
-                <input
-                  type="radio"
-                  class="btn-check"
-                  name="imageOptions"
-                  id="opt7"
-                  value="/assets/art/portrait-of-willemina-van-braeckel.png"
-                  data-year="1637"
-                />
-              </div>
-            </div>
-
-            <!-- Card Item 8 -->
-            <div class="carousel-item">
-              <div class="card my-card mx-auto shadow-sm">
-                <img
-                  src="/assets/cover/lodovico-capponi.png"
-                  class="card-img-top"
-                  alt="Lodovico Capponi"
-                />
-                <input
-                  type="radio"
-                  class="btn-check"
-                  name="imageOptions"
-                  id="opt8"
-                  value="/assets/art/lodovico-capponi.png"
-                  data-year="1555"
-                />
-              </div>
-            </div>
-
-            <!-- Card Item 9 -->
-            <div class="carousel-item">
-              <div class="card my-card mx-auto shadow-sm">
-                <img
-                  src="/assets/cover/bacchus.png"
-                  class="card-img-top"
-                  alt="The adolescent Bacchus"
-                />
-                <input
-                  type="radio"
-                  class="btn-check"
-                  name="imageOptions"
-                  id="opt9"
-                  value="/assets/art/bacchus.png"
-                  data-year="1597"
-                />
-              </div>
-            </div>
-
-            <!-- Card Item 10 -->
-            <div class="carousel-item">
-              <div class="card my-card mx-auto shadow-sm">
-                <img
-                  src="/assets/cover/portrait-of-a-man.png"
-                  class="card-img-top"
-                  alt="Portrait of a Man"
-                />
-                <input
-                  type="radio"
-                  class="btn-check"
-                  name="imageOptions"
-                  id="opt10"
-                  value="/assets/art/portrait-of-a-man.png"
-                  data-year="1430"
-                />
-              </div>
-            </div>
-
-            <!-- เพิ่ม Card Item อื่นๆ ได้ตามต้องการ -->
+      <div class="content">
+        <!-- ================= STEP 1 : เลือกภาพศิลปะ ================= -->
+        <div id="step-1" class="step-container active">
+          <div class="step-title">เลือกภาพที่ต้องการ Face Swap</div>
+          <div class="step-subtitle">
+            แตะเพื่อเลือกภาพศิลปะที่คุณอยากข้ามเวลาไปพบ
           </div>
 
-          <!-- ปุ่มกดเลื่อน Carousel -->
-          <button
-            class="carousel-control-prev"
-            type="button"
-            data-bs-target="#artCarousel"
-            data-bs-slide="prev"
-          >
-            <span
-              class="carousel-control-prev-icon bg-dark rounded-circle p-3"
-              aria-hidden="true"
-            ></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button
-            class="carousel-control-next"
-            type="button"
-            data-bs-target="#artCarousel"
-            data-bs-slide="next"
-          >
-            <span
-              class="carousel-control-next-icon bg-dark rounded-circle p-3"
-              aria-hidden="true"
-            ></span>
-            <span class="visually-hidden">Next</span>
-          </button>
-        </div>
-
-        <!-- ปุ่มไปขั้นตอนถัดไป -->
-        <div class="text-center mt-4">
-          <button id="btnStep1Next" class="btn btn-primary btn-lg px-5">
-            ถัดไป
-          </button>
-        </div>
-      </div>
-
-      <!-- ================= STEP 2: ถ่ายรูปจากกล้อง WebCam ================= -->
-      <div class="step-container" id="step-2">
-        <h4 class="fw-bold mb-3">ขั้นตอนที่ 2: ถ่ายรูปใบหน้าของคุณ</h4>
-        <div class="card p-4 shadow-sm text-center align-items-center">
-          <video id="webcamPreview" autoplay playsinline class="mb-3"></video>
-          <canvas id="capturedCanvas" class="mb-3 d-none"></canvas>
-
-          <div class="d-flex gap-2">
+          <div id="artCarousel" class="carousel slide" data-bs-ride="false">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="card my-card mx-auto shadow-sm">
+                  <img
+                    src="/assets/art/monalisa.png"
+                    class="card-img-top"
+                    alt="Mona Lisa"
+                  />
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    name="imageOptions"
+                    id="opt1"
+                    value="/assets/art/monalisa.png"
+                    data-year="1503"
+                    checked
+                  />
+                  <div class="art-caption">
+                    <span class="art-name">Mona Lisa</span>
+                    <span class="art-year">ค.ศ. 1503</span>
+                  </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="card my-card mx-auto shadow-sm">
+                  <img
+                    src="/assets/art/girl-with-a-pearl-earring.png"
+                    class="card-img-top"
+                    alt="Girl with a Pearl Earring"
+                  />
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    name="imageOptions"
+                    id="opt2"
+                    value="/assets/art/girl-with-a-pearl-earring.png"
+                    data-year="1665"
+                  />
+                  <div class="art-caption">
+                    <span class="art-name">Girl with a Pearl Earring</span>
+                    <span class="art-year">ค.ศ. 1665</span>
+                  </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="card my-card mx-auto shadow-sm">
+                  <img
+                    src="/assets/art/jan-van-eyck.png"
+                    class="card-img-top"
+                    alt="Jan Van Eyck"
+                  />
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    name="imageOptions"
+                    id="opt3"
+                    value="/assets/art/jan-van-eyck.png"
+                    data-year="1433"
+                  />
+                  <div class="art-caption">
+                    <span class="art-name">Jan Van Eyck</span>
+                    <span class="art-year">ค.ศ. 1433</span>
+                  </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="card my-card mx-auto shadow-sm">
+                  <img
+                    src="/assets/art/portrait-of-a-young-girl.png"
+                    class="card-img-top"
+                    alt="Portrait of a Young Girl"
+                  />
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    name="imageOptions"
+                    id="opt4"
+                    value="/assets/art/portrait-of-a-young-girl.png"
+                    data-year="1470"
+                  />
+                  <div class="art-caption">
+                    <span class="art-name">Portrait of a Young Girl</span>
+                    <span class="art-year">ค.ศ. 1470</span>
+                  </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="card my-card mx-auto shadow-sm">
+                  <img
+                    src="/assets/art/ginevra.png"
+                    class="card-img-top"
+                    alt="Ginevra de' Benci"
+                  />
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    name="imageOptions"
+                    id="opt5"
+                    value="/assets/art/ginevra.png"
+                    data-year="1478"
+                  />
+                  <div class="art-caption">
+                    <span class="art-name">Ginevra de' Benci</span>
+                    <span class="art-year">ค.ศ. 1478</span>
+                  </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="card my-card mx-auto shadow-sm">
+                  <img
+                    src="/assets/art/raffaello.png"
+                    class="card-img-top"
+                    alt="Raffaello Sanzio"
+                  />
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    name="imageOptions"
+                    id="opt6"
+                    value="/assets/art/raffaello.png"
+                    data-year="1506"
+                  />
+                  <div class="art-caption">
+                    <span class="art-name">Raffaello Sanzio</span>
+                    <span class="art-year">ค.ศ. 1506</span>
+                  </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="card my-card mx-auto shadow-sm">
+                  <img
+                    src="/assets/art/portrait-of-willemina-van-braeckel.png"
+                    class="card-img-top"
+                    alt="Portrait of Willemina van Braeckel"
+                  />
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    name="imageOptions"
+                    id="opt7"
+                    value="/assets/art/portrait-of-willemina-van-braeckel.png"
+                    data-year="1637"
+                  />
+                  <div class="art-caption">
+                    <span class="art-name">Willemina van Braeckel</span>
+                    <span class="art-year">ค.ศ. 1637</span>
+                  </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="card my-card mx-auto shadow-sm">
+                  <img
+                    src="/assets/art/lodovico-capponi.png"
+                    class="card-img-top"
+                    alt="Lodovico Capponi"
+                  />
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    name="imageOptions"
+                    id="opt8"
+                    value="/assets/art/lodovico-capponi.png"
+                    data-year="1555"
+                  />
+                  <div class="art-caption">
+                    <span class="art-name">Lodovico Capponi</span>
+                    <span class="art-year">ค.ศ. 1555</span>
+                  </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="card my-card mx-auto shadow-sm">
+                  <img
+                    src="/assets/art/bacchus.png"
+                    class="card-img-top"
+                    alt="The adolescent Bacchus"
+                  />
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    name="imageOptions"
+                    id="opt9"
+                    value="/assets/art/bacchus.png"
+                    data-year="1597"
+                  />
+                  <div class="art-caption">
+                    <span class="art-name">The Adolescent Bacchus</span>
+                    <span class="art-year">ค.ศ. 1597</span>
+                  </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="card my-card mx-auto shadow-sm">
+                  <img
+                    src="/assets/art/portrait-of-a-man.png"
+                    class="card-img-top"
+                    alt="Portrait of a Man"
+                  />
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    name="imageOptions"
+                    id="opt10"
+                    value="/assets/art/portrait-of-a-man.png"
+                    data-year="1430"
+                  />
+                  <div class="art-caption">
+                    <span class="art-name">Portrait of a Man</span>
+                    <span class="art-year">ค.ศ. 1430</span>
+                  </div>
+                </div>
+              </div>
+            </div>
             <button
-              id="btnCapture"
-              class="btn btn-danger btn-lg rounded-pill px-4"
+              class="carousel-control-prev"
+              type="button"
+              data-bs-target="#artCarousel"
+              data-bs-slide="prev"
             >
-              ถ่ายรูป
+              <span
+                class="carousel-control-prev-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">ก่อนหน้า</span>
             </button>
             <button
-              id="btnRetake"
-              class="btn btn-secondary btn-lg rounded-pill px-4 d-none"
+              class="carousel-control-next"
+              type="button"
+              data-bs-target="#artCarousel"
+              data-bs-slide="next"
             >
-              ถ่ายใหม่
+              <span
+                class="carousel-control-next-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">ถัดไป</span>
             </button>
+          </div>
+
+          <div class="carousel-dots" id="artDots"></div>
+        </div>
+
+        <!-- ================= STEP 2 : ถ่ายภาพ ================= -->
+        <div id="step-2" class="step-container">
+          <div class="step-title">ถ่ายรูปใบหน้าของคุณ</div>
+          <div class="step-subtitle">
+            จัดใบหน้าให้อยู่กึ่งกลางเฟรม แล้วกดปุ่มถ่ายรูป
+          </div>
+
+          <div
+            class="card camera-card px-4 shadow-sm text-center align-items-center"
+          >
+            <div class="camera-frame">
+              <video id="webcamPreview" autoplay playsinline></video>
+              <canvas id="capturedCanvas" class="d-none"></canvas>
+              <div class="camera-guide"></div>
+            </div>
+
+            <div class="d-flex gap-2 my-3">
+              <button
+                id="btnCapture"
+                class="btn btn-danger btn-lg rounded-pill px-4"
+              >
+                ถ่ายรูป
+              </button>
+              <button
+                id="btnRetake"
+                class="btn btn-secondary btn-lg rounded-pill px-4 d-none"
+              >
+                ถ่ายใหม่
+              </button>
+            </div>
           </div>
         </div>
 
-        <div class="d-flex justify-content-between mt-4">
-          <button
-            id="btnStep2Prev"
-            class="btn btn-outline-secondary btn-lg px-4 rounded-pill"
-          >
-            ย้อนกลับ
-          </button>
-          <button
-            id="btnStep2Next"
-            class="btn btn-primary btn-lg px-5 rounded-pill d-none"
-          >
-            ถัดไป
-          </button>
-        </div>
-      </div>
+        <!-- ================= STEP 3 : เลือกวิธีการเดินทาง ================= -->
+        <div id="step-3" class="step-container">
+          <div class="step-title">เลือกวิธีการเดินทาง</div>
+          <div class="step-subtitle">เลือกทิศทางการข้ามเวลาที่คุณต้องการ</div>
 
-      <div class="step-container" id="step-3">
-        <h4 class="fw-bold mb-3">ขั้นตอนที่ 3: เลือกทิศทางการสลับใบหน้า</h4>
-
-        <div class="row g-3 mb-4">
-          <div class="col-6">
+          <div class="role-select">
             <input
               type="radio"
               name="userRole"
@@ -314,18 +345,14 @@
               value="source"
               checked
             />
-            <label
-              for="roleSource"
-              class="btn btn-outline-primary w-100 p-4 h-100 rounded-4 text-center"
-            >
-              <div class="fw-bold fs-5">กลับไปยังอดีต</div>
-              <small class="text-muted d-block mt-2"
-                >นำใบหน้าของคุณ ไปใส่ในภาพศิลปะยุคคลาสสิก</small
-              >
+            <label for="roleSource" class="role-card">
+              <div class="role-eyebrow">ทางเลือกที่ 1</div>
+              <div class="role-title">เดินทางกลับไปยังอดีต</div>
+              <div class="role-desc">
+                นำใบหน้าของคุณ ไปใส่ในภาพศิลปะยุค Renaissance
+              </div>
             </label>
-          </div>
 
-          <div class="col-6">
             <input
               type="radio"
               name="userRole"
@@ -333,55 +360,41 @@
               class="btn-check"
               value="target"
             />
-            <label
-              for="roleTarget"
-              class="btn btn-outline-primary w-100 p-4 h-100 rounded-4 text-center"
-            >
-              <div class="fw-bold fs-5">อดีตมายังปัจจุบัน</div>
-              <small class="text-muted d-block mt-2"
-                >นำใบหน้าของภาพศิลปะ มาใส่ในรูปถ่ายของคุณ</small
-              >
+            <label for="roleTarget" class="role-card">
+              <div class="role-eyebrow">ทางเลือกที่ 2</div>
+              <div class="role-title">ข้ามเวลามายังปัจจุบัน</div>
+              <div class="role-desc">
+                นำใบหน้าของภาพศิลปะ มาใส่ในรูปถ่ายของคุณ
+              </div>
             </label>
           </div>
         </div>
 
-        <div class="d-flex justify-content-between mt-4">
-          <button
-            id="btnStep3Prev"
-            class="btn btn-outline-secondary btn-lg px-4 rounded-pill"
+        <!-- ================= STEP 4 : กำลังประมวลผล ================= -->
+        <div id="step-4" class="step-container">
+          <div
+            class="card px-4 shadow-sm text-center align-items-center processing-card"
           >
-            ย้อนกลับ
-          </button>
-          <button
-            id="btnSubmitForm"
-            class="btn btn-success btn-lg px-5 rounded-pill fw-bold"
-          >
-            เริ่มประมวลผล
-          </button>
-        </div>
-      </div>
-
-      <!-- ================= STEP 4: Processing & Complete ================= -->
-      <div class="step-container" id="step-4">
-        <div class="card p-5 shadow-sm text-center align-items-center">
-          <div id="processingUI">
             <div
-              class="spinner-border text-primary my-3"
+              class="spinner-border text-white my-3"
               style="width: 4rem; height: 4rem"
               role="status"
             ></div>
-            <h4 class="fw-bold mt-2">กำลังประมวลผลภาพ...</h4>
-            <p class="text-muted">
-              ระบบกำลังส่งภาพไปยังหน้าจอหลัก โปรดรอสักครู่
-            </p>
+            <div class="processing-text" id="processingText">
+              กำลังประมวลผล...
+            </div>
           </div>
+        </div>
 
-          <div id="completedUI" class="d-none">
-            <div class="fs-1 text-success mb-2">🎉</div>
-            <h3 class="fw-bold text-success">ประมวลผลสำเร็จ!</h3>
-            <p class="text-muted mb-4">
-              สแกน QR Code ด้านล่างเพื่อดาวน์โหลดรูปภาพของคุณ
-            </p>
+        <!-- ================= STEP 5 : ผลลัพธ์ ================= -->
+        <div id="step-5" class="step-container">
+          <div class="card px-4 shadow-sm text-center align-items-center">
+            <div class="d-flex flex-column justify-center text-center">
+              <div class="fw-bold fs-4" id="resultTitle">เสร็จสิ้น!</div>
+              <div class="text-muted mb-3">
+                สแกน QR Code ด้านล่างเพื่อดาวน์โหลดรูปภาพของคุณ
+              </div>
+            </div>
 
             <div class="d-flex flex-column align-items-center my-3">
               <div
@@ -389,54 +402,46 @@
                 class="p-3 bg-white rounded shadow-sm border mb-2"
               ></div>
             </div>
-
-            <button
-              id="btnResetApp"
-              class="btn btn-primary btn-lg px-5 rounded-pill"
-            >
-              เริ่มใหม่อีกครั้ง
-            </button>
           </div>
         </div>
       </div>
+
+      <footer>
+        <div id="step-1-button" class="footer-buttons">
+          <button id="btnStep1Next" class="btn btn-next w-100">ถัดไป</button>
+        </div>
+
+        <div id="step-2-button" class="footer-buttons d-none">
+          <button id="btnStep2Prev" class="btn btn-back">ย้อนกลับ</button>
+          <button id="btnStep2Next" class="btn btn-next d-none">ถัดไป</button>
+        </div>
+
+        <div id="step-3-button" class="footer-buttons d-none">
+          <button id="btnStep3Prev" class="btn btn-back">ย้อนกลับ</button>
+          <button id="btnStep3Next" class="btn btn-next">ถัดไป</button>
+        </div>
+
+        <div id="step-5-button" class="footer-buttons d-none">
+          <button id="btnResetApp" class="btn btn-completed w-100">
+            หน้าแรก
+          </button>
+        </div>
+      </footer>
     </div>
 
-    <!-- ================= CONSENT MODAL ================= -->
-    <div
-      class="modal fade"
-      id="consentModal"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-    >
+    <!-- ===================== CONSENT MODAL ===================== -->
+    <div class="modal fade" id="consentModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title fw-bold">ข้อตกลงการใช้งาน (Consent)</h5>
-          </div>
-          <div class="modal-body text-secondary">
-            <p>
-              กิจกรรมนี้จะมีการใช้กล้องเพื่อถ่ายภาพใบหน้าของคุณสำหรับการประมวลผล
-              Face Swap
+        <div class="modal-content consent-modal-content">
+          <div class="modal-body text-center">
+            <div class="consent-title">ขออนุญาตเข้าถึงกล้องถ่ายรูป</div>
+            <p class="consent-text">
+              SWAPSWAP ขออนุญาตใช้กล้องเพื่อถ่ายภาพใบหน้าของคุณ
+              สำหรับใช้ในกระบวนการสลับใบหน้ากับภาพศิลปะเท่านั้น
+              ภาพของคุณจะไม่ถูกนำไปใช้เพื่อวัตถุประสงค์อื่น
             </p>
-            <ul>
-              <li>ภาพถ่ายจะถูกใช้เพื่อการแสดงผลในกิจกรรมเท่านั้น</li>
-              <li>
-                ระบบจะทำการลบภาพต้นฉบับออกจาก Server
-                อัตโนมัติทันทีที่ประมวลผลเสร็จ
-              </li>
-            </ul>
-            <p class="mb-0 fw-bold">
-              คุณยินยอมให้ใช้งานกล้องถ่ายภาพเพื่อร่วมกิจกรรมหรือไม่?
-            </p>
-          </div>
-          <div class="modal-footer">
-            <button
-              id="btnAcceptConsent"
-              type="button"
-              class="btn btn-success w-100 fw-bold py-2"
-            >
-              ฉันยอมรับข้อตกลง (Accept)
+            <button id="btnAcceptConsent" class="btn btn-next w-100">
+              ยินยอมและดำเนินการต่อ
             </button>
           </div>
         </div>

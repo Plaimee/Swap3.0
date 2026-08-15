@@ -1,25 +1,45 @@
-let currentStep = 1;
+// =========================================================
+// SWAPSWAP — app state
+// =========================================================
+let currentStep = 1; // 1..5, steps live inside #setupPage
 let consentAccepted = false;
 let capturedBlob = null;
 let videoStream = null;
 let socketId = null;
+let selectedRole = "source"; // "source" | "target"
+
+const TOTAL_BADGES = 5;
+
+// Role-dependent copy (kept in one place so step-4 / step-5 always match step-3)
+const ROLE_COPY = {
+  source: {
+    processing: "กำลังนำคุณกลับไปยังอดีต...",
+    result: "ย้อนเวลามายังอดีตเรียบร้อยแล้ว!",
+  },
+  target: {
+    processing: "กำลังพาภาพศิลปะข้ามเวลามายังปัจจุบัน...",
+    result: "ข้ามเวลามายังปัจจุบันเสร็จสิ้น!",
+  },
+};
 
 const socket = io();
 
 socket.on("connect", () => {
   socketId = socket.id;
-  console.log(" Connected to Socket. Server ID:", socketId);
+  console.log("Connected to Socket. Server ID:", socketId);
 });
 
+// =========================================================
+// RESULT HANDLING
+// =========================================================
 function handleResultReady(data) {
-  console.log(" Result is ready:", data);
-  const processingUI = document.getElementById("processingUI");
-  const completedUI = document.getElementById("completedUI");
-  const qrcodeContainer = document.getElementById("qrcode");
+  console.log("Result is ready:", data);
 
-  if (processingUI && completedUI) {
-    processingUI.classList.add("d-none");
-    completedUI.classList.remove("d-none");
+  const qrcodeContainer = document.getElementById("qrcode");
+  const resultTitle = document.getElementById("resultTitle");
+
+  if (resultTitle) {
+    resultTitle.textContent = ROLE_COPY[selectedRole].result;
   }
 
   const imageURL =
@@ -43,6 +63,8 @@ function handleResultReady(data) {
       correctLevel: QRCode.CorrectLevel.H,
     });
   }
+
+  goToStep(5);
 }
 
 socket.on("your_result_ready", handleResultReady);
@@ -53,47 +75,64 @@ socket.on("result_updated_global", (data) => {
   }
 });
 
-// ดักฟังกรณีการประมวลผลล้มเหลว
 socket.on("roop_failed", (data) => {
-  console.error(" Processing failed:", data);
+  console.error("Processing failed:", data);
   alert("เกิดข้อผิดพลาดในการประมวลผลภาพ: " + (data.error || "Unknown Error"));
   resetApp();
 });
 
-// ================= INITIALIZATION =================
+// =========================================================
+// BOOTSTRAP EVENT WIRING
+// =========================================================
 document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("btnStart").addEventListener("click", startApp);
+
   document
     .getElementById("btnAcceptConsent")
     .addEventListener("click", acceptConsent);
   document.getElementById("btnCapture").addEventListener("click", takeSnapshot);
   document.getElementById("btnRetake").addEventListener("click", retakePhoto);
-  document
-    .getElementById("btnSubmitForm")
-    .addEventListener("click", submitFinalForm);
   document.getElementById("btnResetApp").addEventListener("click", resetApp);
 
   document
     .getElementById("btnStep1Next")
-    .addEventListener("click", () => nextStep(2));
-  document
-    .getElementById("btnStep2Next")
-    .addEventListener("click", () => nextStep(3));
+    .addEventListener("click", () => goToStep(2));
   document
     .getElementById("btnStep2Prev")
-    .addEventListener("click", () => prevStep(1));
+    .addEventListener("click", () => goBackTo(1));
+  document
+    .getElementById("btnStep2Next")
+    .addEventListener("click", () => goToStep(3));
   document
     .getElementById("btnStep3Prev")
-    .addEventListener("click", () => prevStep(2));
+    .addEventListener("click", () => goBackTo(2));
+  document
+    .getElementById("btnStep3Next")
+    .addEventListener("click", submitFinalForm);
+
+  setupArtCarouselDots();
 });
 
-// ================= STEP NAVIGATION =================
-function updateStepUI() {
-  document.querySelectorAll(".step-container").forEach((el, idx) => {
-    el.classList.toggle("active", idx + 1 === currentStep);
-  });
+// =========================================================
+// START PAGE -> SETUP PAGE
+// =========================================================
+function startApp() {
+  document.getElementById("startPage").classList.add("d-none");
+  document.getElementById("setupPage").classList.remove("d-none");
+  currentStep = 1;
+  updateStepUI();
+}
 
-  for (let i = 1; i <= 4; i++) {
+// =========================================================
+// STEP NAVIGATION
+// =========================================================
+function updateStepUI() {
+  for (let i = 1; i <= TOTAL_BADGES; i++) {
+    const stepEl = document.getElementById(`step-${i}`);
+    if (stepEl) stepEl.classList.toggle("active", i === currentStep);
+
     const badge = document.getElementById(`badge-${i}`);
+    if (!badge) continue;
     if (i < currentStep) {
       badge.className = "step-badge completed";
     } else if (i === currentStep) {
@@ -102,9 +141,23 @@ function updateStepUI() {
       badge.className = "step-badge";
     }
   }
+
+  document
+    .getElementById("step-1-button")
+    .classList.toggle("d-none", currentStep !== 1);
+  document
+    .getElementById("step-2-button")
+    .classList.toggle("d-none", currentStep !== 2);
+  document
+    .getElementById("step-3-button")
+    .classList.toggle("d-none", currentStep !== 3);
+  document
+    .getElementById("step-5-button")
+    .classList.toggle("d-none", currentStep !== 5);
 }
 
-function nextStep(step) {
+// Move forward
+function goToStep(step) {
   if (step === 2 && currentStep === 1) {
     currentStep = 2;
     updateStepUI();
@@ -118,12 +171,22 @@ function nextStep(step) {
     }
     return;
   }
+
+  if (step === 4) {
+    document.getElementById("processingText").textContent =
+      ROLE_COPY[selectedRole].processing;
+  }
+
   currentStep = step;
   updateStepUI();
 }
 
-function prevStep(step) {
-  if (currentStep === 2 && step === 1) {
+// Move backward — resets the step we're returning to so the guest picks again
+function goBackTo(step) {
+  if (step === 1) {
+    // returning to art selection: nothing to clear, just let them re-pick
+  }
+  if (step === 2) {
     stopWebcam();
     resetCameraUI();
   }
@@ -148,6 +211,9 @@ function resetCameraUI() {
   document.getElementById("btnStep2Next").classList.add("d-none");
 }
 
+// =========================================================
+// CONSENT
+// =========================================================
 function acceptConsent() {
   consentAccepted = true;
   const modalEl = document.getElementById("consentModal");
@@ -156,6 +222,9 @@ function acceptConsent() {
   startWebcam();
 }
 
+// =========================================================
+// CAMERA
+// =========================================================
 async function startWebcam() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -269,9 +338,13 @@ function retakePhoto() {
   startWebcam();
 }
 
+// =========================================================
+// SUBMIT (step 3 -> step 4)
+// =========================================================
 async function submitFinalForm() {
   if (!capturedBlob) {
     alert("กรุณาถ่ายภาพก่อนเริ่มทำ Face Swap");
+    goBackTo(2);
     return;
   }
 
@@ -288,29 +361,29 @@ async function submitFinalForm() {
     ? activeCarouselItem.querySelector('input[name="imageOptions"]')
     : null;
 
-  nextStep(4);
-
   if (!selectedRadio) {
     alert("กรุณาเลือกภาพศิลปะ");
     resetApp();
     return;
   }
 
+  const userRoleElement = document.querySelector(
+    'input[name="userRole"]:checked',
+  );
+  selectedRole = userRoleElement ? userRoleElement.value : "source";
+
+  goToStep(4);
+
   const selectedArt = selectedRadio.value;
   const currentYear = new Date().getFullYear();
   const rawYear = selectedRadio.getAttribute("data-year");
   const artYear = rawYear ? parseInt(rawYear, 10) : currentYear;
 
-  const userRoleElement = document.querySelector(
-    'input[name="userRole"]:checked',
-  );
-  const userRole = userRoleElement ? userRoleElement.value : "source";
-
   const formData = new FormData();
   formData.append("photo", capturedBlob, "webcam_user.jpg");
   formData.append("selectedImagePath", selectedArt);
   formData.append("artYear", artYear.toString());
-  formData.append("userRole", userRole);
+  formData.append("userRole", selectedRole);
   formData.append("socketId", activeSocketId);
   formData.append("consentAccepted", consentAccepted.toString());
 
@@ -332,28 +405,48 @@ async function submitFinalForm() {
   }
 }
 
+// =========================================================
+// FULL RESET (step 5 -> start page)
+// =========================================================
 function resetApp() {
   capturedBlob = null;
+  consentAccepted = false;
+  selectedRole = "source";
 
   const qrcodeContainer = document.getElementById("qrcode");
-  if (qrcodeContainer) {
-    qrcodeContainer.innerHTML = "";
-  }
+  if (qrcodeContainer) qrcodeContainer.innerHTML = "";
 
-  document.getElementById("processingUI").classList.remove("d-none");
-  document.getElementById("completedUI").classList.add("d-none");
-  document.getElementById("capturedCanvas").classList.add("d-none");
-  document.getElementById("webcamPreview").classList.remove("d-none");
-  document.getElementById("btnCapture").classList.remove("d-none");
-  document.getElementById("btnRetake").classList.add("d-none");
-  document.getElementById("btnStep2Next").classList.add("d-none");
+  resetCameraUI();
+  stopWebcam();
+
+  const roleSource = document.getElementById("roleSource");
+  if (roleSource) roleSource.checked = true;
+  const roleTarget = document.getElementById("roleTarget");
+  if (roleTarget) roleTarget.checked = false;
 
   currentStep = 1;
   updateStepUI();
+
+  document.getElementById("setupPage").classList.add("d-none");
+  document.getElementById("startPage").classList.remove("d-none");
 }
 
-const artCarousel = document.getElementById("artCarousel");
-if (artCarousel) {
+// =========================================================
+// ART CAROUSEL — keep radio selection + dot indicator in sync
+// =========================================================
+function setupArtCarouselDots() {
+  const artCarousel = document.getElementById("artCarousel");
+  if (!artCarousel) return;
+
+  const items = artCarousel.querySelectorAll(".carousel-item");
+  const dotsContainer = document.getElementById("artDots");
+
+  items.forEach((_, idx) => {
+    const dot = document.createElement("span");
+    if (idx === 0) dot.classList.add("active");
+    dotsContainer.appendChild(dot);
+  });
+
   artCarousel.addEventListener("slid.bs.carousel", (event) => {
     document
       .querySelectorAll('input[name="imageOptions"]')
@@ -361,8 +454,11 @@ if (artCarousel) {
 
     const activeItem = event.relatedTarget;
     const radioBtn = activeItem.querySelector('input[type="radio"]');
-    if (radioBtn) {
-      radioBtn.checked = true;
-    }
+    if (radioBtn) radioBtn.checked = true;
+
+    const activeIndex = Array.from(items).indexOf(activeItem);
+    dotsContainer.querySelectorAll("span").forEach((dot, idx) => {
+      dot.classList.toggle("active", idx === activeIndex);
+    });
   });
 }
