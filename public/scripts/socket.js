@@ -158,7 +158,9 @@ function updateStepUI() {
 
 // Move forward
 function goToStep(step) {
-  if (step === 2 && currentStep === 1) {
+  if (step === 2) {
+    stopWebcam();
+    resetCameraUI();
     currentStep = 2;
     updateStepUI();
     if (!consentAccepted) {
