@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SWAPSWAP — สมุดบันทึกการสลับใบหน้า</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #eee7da;
+        --ink-dim: #b8ac98;
+        --ground: #1b1815;
+        --ground-raised: #241f1a;
+        --ground-plate: #2a241e;
+        --gold: #c79a56;
+        --gold-dim: #7d6641;
+        --sage: #8a9b7c;
+        --clay: #b6604f;
+        --hairline: rgba(199, 154, 86, 0.18);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background:
+          radial-gradient(
+            ellipse 1200px 600px at 50% -10%,
+            rgba(199, 154, 86, 0.08),
+            transparent
+          ),
+          var(--ground);
+        color: var(--ink);
+        font-family: "Inter", sans-serif;
+        min-height: 100vh;
+      }
+
+      .wrap {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 48px 28px 100px;
+      }
+
+      header.top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        gap: 20px;
+        border-bottom: 1px solid var(--hairline);
+        padding-bottom: 28px;
+        margin-bottom: 36px;
+      }
+
+      .eyebrow {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin: 0 0 10px;
+      }
+
+      h1 {
+        font-family: "Fraunces", serif;
+        font-weight: 600;
+        font-size: 34px;
+        margin: 0;
+        letter-spacing: -0.01em;
+      }
+
+      h1 em {
+        font-style: italic;
+        color: var(--gold);
+        font-weight: 500;
+      }
+
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      #liveDot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--ink-dim);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.03);
+        transition: background 0.2s;
+      }
+      #liveDot.on {
+        background: var(--sage);
+        box-shadow: 0 0 0 3px rgba(138, 155, 124, 0.18);
+      }
+
+      #liveLabel {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        color: var(--ink-dim);
+        letter-spacing: 0.04em;
+      }
+
+      button#refreshBtn {
+        font-family: "Inter", sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        background: transparent;
+        color: var(--gold);
+        border: 1px solid var(--gold-dim);
+        padding: 9px 16px;
+        border-radius: 3px;
+        cursor: pointer;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+      button#refreshBtn:hover {
+        background: var(--gold);
+        color: var(--ground);
+      }
+      button#refreshBtn:focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: 2px;
+      }
+
+      /* stats */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1px;
+        background: var(--hairline);
+        border: 1px solid var(--hairline);
+        margin-bottom: 44px;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      .stat {
+        background: var(--ground-raised);
+        padding: 20px 22px;
+      }
+      .stat .num {
+        font-family: "Fraunces", serif;
+        font-size: 30px;
+        font-weight: 600;
+        color: var(--ink);
+        line-height: 1;
+      }
+      .stat .label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10.5px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-dim);
+        margin-top: 8px;
+      }
+      .stat.accent .num {
+        color: var(--gold);
+      }
+
+      /* day plate */
+      .day {
+        margin-bottom: 52px;
+      }
+      .day-head {
+        display: flex;
+        align-items: baseline;
+        gap: 14px;
+        margin-bottom: 18px;
+      }
+      .day-head .plate-no {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        color: var(--gold-dim);
+        letter-spacing: 0.06em;
+      }
+      .day-head h2 {
+        font-family: "Fraunces", serif;
+        font-weight: 600;
+        font-size: 20px;
+        margin: 0;
+      }
+      .day-head .count {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--ink-dim);
+      }
+      .day-head .rule {
+        flex: 1;
+        height: 1px;
+        background: var(--hairline);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+      }
+
+      .frame {
+        background: var(--ground-plate);
+        border: 1px solid var(--hairline);
+        border-radius: 4px;
+        overflow: hidden;
+        transition:
+          border-color 0.15s,
+          transform 0.15s;
+      }
+      .frame:hover {
+        border-color: var(--gold-dim);
+        transform: translateY(-2px);
+      }
+
+      .frame .art {
+        position: relative;
+        aspect-ratio: 3 / 4;
+        background: var(--ground-raised);
+        border-bottom: 1px solid var(--hairline);
+      }
+      .frame .art img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .frame .art .placeholder {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10.5px;
+        color: var(--ink-dim);
+        text-align: center;
+        padding: 10px;
+        letter-spacing: 0.03em;
+      }
+
+      .frame .plaque {
+        padding: 11px 13px 13px;
+      }
+      .frame .plaque .row1 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 6px;
+      }
+      .frame .plaque .mode {
+        font-family: "Fraunces", serif;
+        font-size: 13.5px;
+        font-weight: 500;
+        color: var(--ink);
+      }
+      .frame .plaque .time {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10.5px;
+        color: var(--ink-dim);
+      }
+      .frame .plaque .row2 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .frame .plaque .player {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        color: var(--ink-dim);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 70%;
+      }
+
+      .badge {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 9.5px;
+        letter-spacing: 0.05em;
+        padding: 2px 7px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+      .badge.yes {
+        background: rgba(138, 155, 124, 0.15);
+        color: var(--sage);
+      }
+      .badge.no {
+        background: rgba(182, 96, 79, 0.15);
+        color: var(--clay);
+      }
+      .badge.pending {
+        background: rgba(199, 154, 86, 0.15);
+        color: var(--gold);
+      }
+
+      /* states */
+      .state {
+        text-align: center;
+        padding: 90px 20px;
+        color: var(--ink-dim);
+      }
+      .state .glyph {
+        font-family: "Fraunces", serif;
+        font-size: 42px;
+        color: var(--gold-dim);
+        margin-bottom: 14px;
+      }
+      .state h3 {
+        font-family: "Fraunces", serif;
+        font-size: 19px;
+        color: var(--ink);
+        margin: 0 0 8px;
+        font-weight: 500;
+      }
+      .state p {
+        font-size: 13.5px;
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      @media (max-width: 640px) {
+        .stats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        h1 {
+          font-size: 26px;
+        }
+        .grid {
+          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+          gap: 14px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .frame {
+          transition: none;
+        }
+        .frame:hover {
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="top">
+        <div>
+          <p class="eyebrow">SWAPSWAP — Event Log</p>
+          <h1>สมุดบันทึก<em>การสลับใบหน้า</em></h1>
+        </div>
+        <div class="actions">
+          <span id="liveDot"></span>
+          <span id="liveLabel">เชื่อมต่ออยู่...</span>
+          <button id="refreshBtn">รีเฟรช</button>
+        </div>
+      </header>
+
+      <div class="stats" id="stats"></div>
+      <div id="content">
+        <div class="state">
+          <div class="glyph">···</div>
+          <h3>กำลังโหลดข้อมูล</h3>
+          <p>กรุณารอสักครู่</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const contentEl = document.getElementById("content");
+      const statsEl = document.getElementById("stats");
+      const liveDot = document.getElementById("liveDot");
+      const liveLabel = document.getElementById("liveLabel");
+
+      const modeLabel = (mode) =>
+        mode === "past_to_present" ? "อดีต → ปัจจุบัน" : "ปัจจุบัน → อดีต";
+
+      function fmtTime(iso) {
+        const d = new Date(iso);
+        return d.toLocaleTimeString("th-TH", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+      }
+
+      function fmtDayLabel(dateKey) {
+        const d = new Date(dateKey + "T00:00:00");
+        const today = new Date();
+        const todayKey = today.toISOString().slice(0, 10);
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yKey = yesterday.toISOString().slice(0, 10);
+        if (dateKey === todayKey) return "วันนี้";
+        if (dateKey === yKey) return "เมื่อวาน";
+        return d.toLocaleDateString("th-TH", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+      }
+
+      function dateKeyOf(iso) {
+        return new Date(iso).toISOString().slice(0, 10);
+      }
+
+      function renderStats(logs) {
+        const total = logs.length;
+        const todayKey = new Date().toISOString().slice(0, 10);
+        const today = logs.filter(
+          (l) => dateKeyOf(l.created_at) === todayKey,
+        ).length;
+        const withConsent = logs.filter((l) => l.consent_accepted).length;
+        const completed = logs.filter((l) => l.result_image_url).length;
+
+        statsEl.innerHTML = `
+      <div class="stat accent"><div class="num">${total}</div><div class="label">รายการทั้งหมด</div></div>
+      <div class="stat"><div class="num">${today}</div><div class="label">วันนี้</div></div>
+      <div class="stat"><div class="num">${completed}</div><div class="label">สร้างภาพสำเร็จ</div></div>
+      <div class="stat"><div class="num">${total ? Math.round((withConsent / total) * 100) : 0}%</div><div class="label">ยินยอมใช้ภาพ</div></div>
+    `;
+      }
+
+      function cardHTML(log) {
+        const consentBadge = log.consent_accepted
+          ? `<span class="badge yes">ยินยอม</span>`
+          : `<span class="badge no">ไม่ยินยอม</span>`;
+        const img = log.result_image_url
+          ? `<img src="${log.result_image_url}" alt="ผลลัพธ์การสลับใบหน้าของ ${log.player_id}" loading="lazy" />`
+          : `<div class="placeholder">${log.consent_accepted ? "ยังไม่มีภาพผลลัพธ์" : "ไม่ยินยอมให้แสดงภาพ"}</div>`;
+
+        return `
+      <div class="frame">
+        <div class="art">${img}</div>
+        <div class="plaque">
+          <div class="row1">
+            <span class="mode">${modeLabel(log.swap_mode)}</span>
+            <span class="time">${fmtTime(log.created_at)}</span>
+          </div>
+          <div class="row2">
+            <span class="player" title="${log.player_id}">${log.player_id}</span>
+            ${consentBadge}
+          </div>
+        </div>
+      </div>
+    `;
+      }
+
+      function render(logs) {
+        renderStats(logs);
+
+        if (!logs.length) {
+          contentEl.innerHTML = `
+        <div class="state">
+          <div class="glyph">◇</div>
+          <h3>ยังไม่มีบันทึก</h3>
+          <p>เมื่อมีผู้เล่นอัปโหลดภาพ รายการจะปรากฏที่นี่โดยอัตโนมัติ</p>
+        </div>`;
+          return;
+        }
+
+        const groups = {};
+        for (const log of logs) {
+          const key = dateKeyOf(log.created_at);
+          (groups[key] = groups[key] || []).push(log);
+        }
+        const dayKeys = Object.keys(groups).sort((a, b) => b.localeCompare(a));
+
+        contentEl.innerHTML = dayKeys
+          .map(
+            (key, i) => `
+      <section class="day">
+        <div class="day-head">
+          <span class="plate-no">แผ่นที่ ${String(dayKeys.length - i).padStart(2, "0")}</span>
+          <h2>${fmtDayLabel(key)}</h2>
+          <span class="count">${groups[key].length} รายการ</span>
+          <span class="rule"></span>
+        </div>
+        <div class="grid">
+          ${groups[key].map(cardHTML).join("")}
+        </div>
+      </section>
+    `,
+          )
+          .join("");
+      }
+
+      let cachedLogs = [];
+
+      async function loadLogs() {
+        try {
+          const res = await fetch("/logs");
+          const json = await res.json();
+          if (!json.success) throw new Error("Server returned success: false");
+          cachedLogs = json.data;
+          render(cachedLogs);
+        } catch (err) {
+          contentEl.innerHTML = `
+        <div class="state">
+          <div class="glyph">!</div>
+          <h3>โหลดข้อมูลไม่สำเร็จ</h3>
+          <p>ตรวจสอบว่าเซิร์ฟเวอร์กำลังทำงานอยู่ แล้วกดรีเฟรชอีกครั้ง</p>
+        </div>`;
+          console.error("Failed to load /logs:", err);
+        }
+      }
+
+      document.getElementById("refreshBtn").addEventListener("click", loadLogs);
+
+      // live updates via the socket.io connection this project already uses
+      try {
+        const socket = io();
+        socket.on("connect", () => {
+          liveDot.classList.add("on");
+          liveLabel.textContent = "อัปเดตสด";
+        });
+        socket.on("disconnect", () => {
+          liveDot.classList.remove("on");
+          liveLabel.textContent = "ขาดการเชื่อมต่อ";
+        });
+        socket.on("result_updated_global", () => loadLogs());
+      } catch (err) {
+        liveLabel.textContent = "ไม่ได้เชื่อมต่อสด";
+        console.warn("Socket.IO not available for live updates:", err);
+      }
+
+      loadLogs();
+      setInterval(loadLogs, 30000);
+    </script>
+  </body>
+</html>

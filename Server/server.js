@@ -265,6 +265,10 @@ app.get("/logs", async (req, res) => {
   res.json({ success: true, data: logs });
 });
 
+app.get("/logs/view", (req, res) => {
+  res.sendFile(path.join(__dirname, "./private/logs.html"));
+});
+
 server.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
   console.log(`Public base URL: ${PUBLIC_BASE_URL}`);

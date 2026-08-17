@@ -1,4 +1,6 @@
-roop-main/.env
+roop-main/
 
-server/
-public/
+server/node_modules/
+server/uploads/
+server/.env
+public/display/Build/*.br
